@@ -4,6 +4,7 @@ import com.odde.bbuddy.budget.domain.Budget;
 import com.odde.bbuddy.budget.domain.Budgets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -29,7 +30,8 @@ public class BudgetController {
     }
 
     @GetMapping("/budgets/list")
-    public String listBudgets() {
+    public String listBudgets(Model model) {
+        model.addAttribute("budgets", budgets.getAll());
         return "/budgets/list";
     }
 }
