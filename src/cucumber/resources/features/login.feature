@@ -11,7 +11,7 @@ Feature: Login
     When login with user name "user" and password "wrong_password"
     Then login failed with some message
 
-  @user
-  Scenario: Successful Logout
-    When logout
-    Then logout with some message
+#  @user
+#  Scenario: Successful Logout
+#    When logout
+#    Then logout with some message
