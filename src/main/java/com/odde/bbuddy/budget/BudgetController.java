@@ -10,4 +10,9 @@ public class BudgetController {
     public String addBudget() {
         return "/budgets/add";
     }
+
+    @GetMapping("/budgets/list")
+    public String listBudgets() {
+        return "/budgets/list";
+    }
 }
