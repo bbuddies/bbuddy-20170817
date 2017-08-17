@@ -1,13 +1,19 @@
 package com.odde.bbuddy.budget.domain;
 
+import com.odde.bbuddy.budget.repo.BudgetRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import static java.lang.System.out;
 
 @Component
 public class Budgets {
+    private final BudgetRepo budgetRepo;
+
+    @Autowired
+    public Budgets(BudgetRepo budgetRepo) {
+        this.budgetRepo = budgetRepo;
+    }
+
     public void add(Budget budget) {
-        out.println("month: " + budget.getMonth());
-        out.println("amount: " + budget.getAmount());
+        budgetRepo.save(budget);
     }
 }
