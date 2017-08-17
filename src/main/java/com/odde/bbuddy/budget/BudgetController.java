@@ -1,16 +1,21 @@
 package com.odde.bbuddy.budget;
 
 import com.odde.bbuddy.budget.domain.Budget;
-import lombok.extern.slf4j.Slf4j;
+import com.odde.bbuddy.budget.domain.Budgets;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import static java.lang.System.out;
-
 @Controller
-@Slf4j
 public class BudgetController {
+
+    private final Budgets budgets;
+
+    @Autowired
+    public BudgetController(Budgets budgets) {
+        this.budgets = budgets;
+    }
 
     @GetMapping("/budgets/add")
     public String addBudget() {
@@ -19,8 +24,7 @@ public class BudgetController {
 
     @PostMapping("/budgets/add")
     public String submitAddBudget(Budget budget) {
-        out.println("month: " + budget.getMonth());
-        out.println("amount: " + budget.getAmount());
+        budgets.add(budget);
         return "/budgets/add";
     }
 
