@@ -25,6 +25,20 @@ public class BudgetsTest {
 
         verify(mockBudgetRepo).save(budget);
     }
+
+
+    @Test
+    public void budgets_add_should_validate_month() {
+        BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
+        Budgets budgets = new Budgets(mockBudgetRepo);
+
+        Budget budget = new Budget();
+        budget.setMonth("201705");
+        budget.setAmount(200);
+        boolean result = budgets.validation(budget);
+
+        assertThat(result).isEqualTo(false);
+    }
     
     @Test
     public void get_all_should_find_all_budgets() {

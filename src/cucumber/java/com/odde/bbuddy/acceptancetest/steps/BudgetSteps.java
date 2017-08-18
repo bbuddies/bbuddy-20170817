@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class BudgetSteps {
 
     @Autowired
@@ -27,4 +29,17 @@ public class BudgetSteps {
         uiDriver.waitForTextPresent(budgets.get(0).getMonth());
         uiDriver.waitForTextPresent(budgets.get(0).getAmount());
     }
+
+    @Then("^there is an error message \"([^\"]*)\"$")
+    public void there_is_an_error_message(String message) throws Throwable {
+
+        uiDriver.waitForTextPresent(message);
+
+        //assertErrorMessageEquals(month, "wrong month");
+    }
+
+    private void assertErrorMessageEquals(String field, String errorMessageTemplate) {
+        assertThat(uiDriver.getAllTextInPage()).containsIgnoringCase(field+errorMessageTemplate);
+    }
+
 }
