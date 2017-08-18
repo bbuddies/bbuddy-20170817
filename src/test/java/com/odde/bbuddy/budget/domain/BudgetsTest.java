@@ -12,12 +12,12 @@ import static org.mockito.Mockito.*;
 
 public class BudgetsTest {
 
+    private BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
+    private Budgets budgets = new Budgets(mockBudgetRepo);
+
     @Test
     public void budgets_repeat_add_should_update_budget() {
         //given
-        BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
-        Budgets budgets = new Budgets(mockBudgetRepo);
-
         Budget budget = new Budget();
         budget.setMonth("2017-08");
         budget.setAmount(400);
@@ -27,9 +27,8 @@ public class BudgetsTest {
         existBudget.setMonth("2017-08");
         existBudget.setAmount(1000);
 
-        when(mockBudgetRepo.findByMonth(budget.getMonth())).thenReturn(existBudget);
-
         //when
+        when(mockBudgetRepo.findByMonth(budget.getMonth())).thenReturn(existBudget);
         budgets.add(budget);
 
         //then
@@ -42,9 +41,6 @@ public class BudgetsTest {
     }
     @Test
     public void budgets_add_should_save_budget() {
-        BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
-        Budgets budgets = new Budgets(mockBudgetRepo);
-
         Budget budget = new Budget();
         budget.setMonth("2017-02");
         budget.setAmount(200);
