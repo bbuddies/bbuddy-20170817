@@ -1,9 +1,11 @@
 package com.odde.bbuddy.budget.domain;
 
 import com.odde.bbuddy.budget.repo.BudgetRepo;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +31,9 @@ public class BudgetsTest {
 
         //when
         when(mockBudgetRepo.findByMonth(budget.getMonth())).thenReturn(existBudget);
-        budgets.add(budget,()->{},()->{});
+        budgets.add(budget, () -> {
+        }, () -> {
+        });
 
         //then
         ArgumentCaptor<Budget> captor = ArgumentCaptor.forClass(Budget.class);
@@ -45,7 +49,9 @@ public class BudgetsTest {
         Budget budget = new Budget();
         budget.setMonth("2017-02");
         budget.setAmount(200);
-        budgets.add(budget,()->{},()->{});
+        budgets.add(budget, () -> {
+        }, () -> {
+        });
 
         when(mockBudgetRepo.findByMonth(budget.getMonth())).thenReturn(null);
 
@@ -70,7 +76,7 @@ public class BudgetsTest {
 
         assertThat(result).isEqualTo(false);
     }
-    
+
     @Test
     public void get_all_should_find_all_budgets() {
         BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
@@ -79,6 +85,34 @@ public class BudgetsTest {
         when(mockBudgetRepo.findAll()).thenReturn(allBudgets);
 
         assertThat(budgets.getAll()).isEqualTo(allBudgets);
+    }
+
+    @Test
+    public void total_months_test() throws ParseException {
+        BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
+        Budgets budgets = new Budgets(mockBudgetRepo);
+        double amount = budgets.calculate("2017-06-05", "2017-07-10");
+        assertThat(amount).isEqualTo(620);
+    }
+
+    @Test
+    @Ignore
+    public void calculate_amount_between_begin_date_and_end_date() {
+        String beginDate = "2017-06-05";
+        String endDate = "2017-07-10";
+        BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
+        Budgets budgets = new Budgets(mockBudgetRepo);
+        Budget budget1 = new Budget();
+        budget1.setId(2);
+        budget1.setAmount(600);
+        budget1.setMonth("2017-06");
+        Budget budget2 = new Budget();
+        budget2.setId(3);
+        budget2.setAmount(310);
+        budget2.setMonth("2017-07");
+        List<Budget> allBudgets = Arrays.asList(budget1, budget2);
+
+        when(mockBudgetRepo.findAll()).thenReturn(allBudgets);
     }
 
 }

@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.text.ParseException;
+
 @Controller
 public class BudgetController {
 
@@ -28,8 +30,8 @@ public class BudgetController {
         return "/budgets/calculate";
     }
      @PostMapping("/budgets/calculate")
-    public String calculate(String beginDate,String endDate,Model model) {
-         model.addAttribute("amount", 620);
+    public String calculate(String beginDate,String endDate,Model model) throws ParseException {
+         model.addAttribute("amount", budgets.calculate(beginDate,endDate));
         return "/budgets/calculate";
     }
     @PostMapping("/budgets/add")
