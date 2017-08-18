@@ -3,6 +3,7 @@ package com.odde.bbuddy.budget;
 import com.odde.bbuddy.budget.domain.Budget;
 import com.odde.bbuddy.budget.domain.Budgets;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,10 +26,15 @@ public class BudgetController {
 
     @PostMapping("/budgets/add")
     public String submitAddBudget(Budget budget,Model model) {
-        if(budgets.validation(budget))
-            budgets.add(budget);
-        else
-            model.addAttribute("error","wrong month");
+        if (budgets.validation(budget)) {
+            try {
+                budgets.add(budget);
+            } catch (DataAccessException e) {
+                model.addAttribute("error", "database error");
+            }
+        } else {
+            model.addAttribute("error", "wrong month");
+        }
 
         return "/budgets/add";
     }
@@ -38,4 +44,5 @@ public class BudgetController {
         model.addAttribute("budgets", budgets.getAll());
         return "/budgets/list";
     }
+
 }

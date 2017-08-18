@@ -24,7 +24,6 @@ public class Budgets {
             budgetRepo.save(budget);
             return;
         }
-
         queryBudget.setAmount(budget.getAmount());
         budgetRepo.save(queryBudget);
     }
