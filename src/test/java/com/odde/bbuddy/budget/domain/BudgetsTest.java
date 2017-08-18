@@ -2,19 +2,19 @@ package com.odde.bbuddy.budget.domain;
 
 import com.odde.bbuddy.budget.repo.BudgetRepo;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class BudgetsTest {
 
     @Test
     public void budgets_repeat_add_should_update_budget() {
+        //given
         BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
         Budgets budgets = new Budgets(mockBudgetRepo);
 
@@ -22,17 +22,22 @@ public class BudgetsTest {
         budget.setMonth("2017-08");
         budget.setAmount(400);
 
-        //given
-        Budget queryBudget = mock(Budget.class);
+        Budget existBudget = new Budget();
+        existBudget.setId(11L);
+        existBudget.setMonth("2017-08");
+        existBudget.setAmount(1000);
 
-        when(mockBudgetRepo.findByMonth(budget.getMonth())).thenReturn(queryBudget);
+        when(mockBudgetRepo.findByMonth(budget.getMonth())).thenReturn(existBudget);
 
         //when
         budgets.add(budget);
 
         //then
-        verify(queryBudget).setAmount(budget.getAmount());
-        verify(mockBudgetRepo).save(queryBudget);
+        ArgumentCaptor<Budget> captor = ArgumentCaptor.forClass(Budget.class);
+        verify(mockBudgetRepo).save(captor.capture());
+        assertThat(400).isEqualTo(captor.getValue().getAmount());
+        assertThat("2017-08").isEqualTo(captor.getValue().getMonth());
+        assertThat(11L).isEqualTo(captor.getValue().getId());
 
     }
     @Test
@@ -45,7 +50,14 @@ public class BudgetsTest {
         budget.setAmount(200);
         budgets.add(budget);
 
-        verify(mockBudgetRepo).save(budget);
+        when(mockBudgetRepo.findByMonth(budget.getMonth())).thenReturn(null);
+
+        ArgumentCaptor<Budget> captor = ArgumentCaptor.forClass(Budget.class);
+        verify(mockBudgetRepo).save(captor.capture());
+        assertThat("2017-02").isEqualTo(captor.getValue().getMonth());
+        assertThat(200).isEqualTo(captor.getValue().getAmount());
+        assertThat(0L).isEqualTo(captor.getValue().getId());
+
     }
 
 
