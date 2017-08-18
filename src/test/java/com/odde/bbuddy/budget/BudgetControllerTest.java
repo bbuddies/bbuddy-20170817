@@ -17,12 +17,13 @@ public class BudgetControllerTest {
     @Test
     public void submit_add_budget_should_call_budgets_add() {
         Budgets mockBudgets = mock(Budgets.class);
+        Model mockModel = mock(Model.class);
         BudgetController controller = new BudgetController(mockBudgets);
 
         Budget budget = new Budget();
         budget.setMonth("2017-05");
         budget.setAmount(300);
-        controller.submitAddBudget(budget);
+        controller.submitAddBudget(budget,mockModel);
 
         verify(mockBudgets).add(budget);
     }

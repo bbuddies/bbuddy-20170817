@@ -24,8 +24,12 @@ public class BudgetController {
     }
 
     @PostMapping("/budgets/add")
-    public String submitAddBudget(Budget budget) {
-        budgets.add(budget);
+    public String submitAddBudget(Budget budget,Model model) {
+        if(budgets.validation(budget))
+            budgets.add(budget);
+        else
+            model.addAttribute("error","wrong month");
+
         return "/budgets/add";
     }
 

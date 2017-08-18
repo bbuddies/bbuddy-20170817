@@ -18,7 +18,7 @@ public class Budgets {
     }
 
     public void add(Budget budget) {
-        budgetRepo.save(budget);
+            budgetRepo.save(budget);
     }
 
     public boolean validation(Budget budget){
