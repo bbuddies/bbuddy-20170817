@@ -2,6 +2,7 @@ package com.odde.bbuddy.acceptancetest.steps;
 
 import com.odde.bbuddy.acceptancetest.data.PresentableBudget;
 import com.odde.bbuddy.acceptancetest.driver.UiDriver;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +39,8 @@ public class BudgetSteps {
 
 
 
+    @Given("^exist the budget with month \"([^\"]*)\" and amount (\\d+)$")
+    public void exist_the_budget_with_month_and_amount(String month, int amount) throws Throwable {
+
+    }
 }
