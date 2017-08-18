@@ -23,9 +23,7 @@ public class BudgetsTest {
         budget.setAmount(400);
 
         //given
-        Budget queryBudget = new Budget();
-        queryBudget.setMonth("2017-08");
-        queryBudget.setAmount(1000);
+        Budget queryBudget = mock(Budget.class);
 
         when(mockBudgetRepo.findByMonth(budget.getMonth())).thenReturn(queryBudget);
 
