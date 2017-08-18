@@ -41,6 +41,18 @@ public class BudgetSteps {
 
     @Given("^exist the budget with month \"([^\"]*)\" and amount (\\d+)$")
     public void exist_the_budget_with_month_and_amount(String month, int amount) throws Throwable {
-
+        uiDriver.navigateTo("/budgets/add");
+        uiDriver.inputTextByName(month, "month");
+        uiDriver.inputTextByName(String.valueOf(amount), "amount");
+        uiDriver.clickByText("Save");
     }
+
+    @Then("^the following budget only one month \"([^\"]*)\" and amount is (\\d+)$")
+    public void the_following_budget_only_one_month_and_amount_is(String month, int amount) throws Throwable {
+        uiDriver.navigateTo("/budgets/list");
+        //TODO 怎么拿到页面上的表格的集合
+        uiDriver.waitForTextPresent(month);
+        uiDriver.waitForTextPresent(String.valueOf(amount));
+    }
+
 }

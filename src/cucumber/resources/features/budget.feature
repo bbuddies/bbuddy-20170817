@@ -22,6 +22,4 @@ Feature: Budget
   Scenario: Add a repeat budget
     Given exist the budget with month "2017-08" and amount 1000
     When add a budget with month "2017-08" and amount 400
-    Then the following budget will be listed
-      | month   | amount |
-      | 2017-08 | 400   |
+    Then the following budget only one month "2017-08" and amount is 400
