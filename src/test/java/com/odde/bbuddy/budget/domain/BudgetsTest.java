@@ -29,7 +29,7 @@ public class BudgetsTest {
 
         //when
         when(mockBudgetRepo.findByMonth(budget.getMonth())).thenReturn(existBudget);
-        budgets.add(budget);
+        budgets.add(budget,()->{},()->{});
 
         //then
         ArgumentCaptor<Budget> captor = ArgumentCaptor.forClass(Budget.class);
@@ -39,12 +39,13 @@ public class BudgetsTest {
         assertThat(11L).isEqualTo(captor.getValue().getId());
 
     }
+
     @Test
     public void budgets_add_should_save_budget() {
         Budget budget = new Budget();
         budget.setMonth("2017-02");
         budget.setAmount(200);
-        budgets.add(budget);
+        budgets.add(budget,()->{},()->{});
 
         when(mockBudgetRepo.findByMonth(budget.getMonth())).thenReturn(null);
 

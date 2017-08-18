@@ -2,6 +2,7 @@ package com.odde.bbuddy.budget.domain;
 
 import com.odde.bbuddy.budget.repo.BudgetRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,14 +19,23 @@ public class Budgets {
         this.budgetRepo = budgetRepo;
     }
 
-    public void add(Budget budget) {
-        Budget queryBudget = budgetRepo.findByMonth(budget.getMonth());
-        if (Objects.isNull(queryBudget)) {
-            budgetRepo.save(budget);
+    public void add(Budget budget, Runnable afterAddFailed, Runnable validationFailed) {
+        if (!validation(budget)) {
+            validationFailed.run();
             return;
         }
-        queryBudget.setAmount(budget.getAmount());
-        budgetRepo.save(queryBudget);
+
+        try {
+            Budget queryBudget = budgetRepo.findByMonth(budget.getMonth());
+            if (Objects.isNull(queryBudget)) {
+                budgetRepo.save(budget);
+                return;
+            }
+            queryBudget.setAmount(budget.getAmount());
+            budgetRepo.save(queryBudget);
+        } catch (DataAccessException e) {
+            afterAddFailed.run();
+        }
     }
 
     public boolean validation(Budget budget){

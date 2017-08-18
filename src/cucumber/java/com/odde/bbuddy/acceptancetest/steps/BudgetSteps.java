@@ -2,6 +2,7 @@ package com.odde.bbuddy.acceptancetest.steps;
 
 import com.odde.bbuddy.acceptancetest.data.PresentableBudget;
 import com.odde.bbuddy.acceptancetest.driver.UiDriver;
+import com.odde.bbuddy.budget.domain.Budget;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -52,6 +53,27 @@ public class BudgetSteps {
         uiDriver.navigateTo("/budgets/list");
         //TODO 怎么拿到页面上的表格的集合
         uiDriver.waitForTextPresent(month);
+        uiDriver.waitForTextPresent(String.valueOf(amount));
+    }
+
+    @Given("^exist following budget listed$")
+    public void exist_following_budget_listed(List<Budget> budgets) throws Throwable {
+        for (Budget budget : budgets) {
+            add_a_budget_with_month_and_amount(budget.getMonth(), budget.getAmount());
+        }
+
+    }
+
+    @When("^calculate beginDate \"([^\"]*)\" endDate \"([^\"]*)\"$")
+    public void calculate_beginDate_endDate(String beginDate, String endDate) throws Throwable {
+        uiDriver.navigateTo("/budgets/calculate");
+        uiDriver.inputTextByName(beginDate, "beginDate");
+        uiDriver.inputTextByName(endDate, "endDate");
+        uiDriver.clickByText("Calculate");
+    }
+
+    @Then("^budget amount is (\\d+)$")
+    public void budget_amount_is(int amount) throws Throwable {
         uiDriver.waitForTextPresent(String.valueOf(amount));
     }
 

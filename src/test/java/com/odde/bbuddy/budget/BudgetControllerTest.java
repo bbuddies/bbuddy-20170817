@@ -15,6 +15,21 @@ import static org.mockito.Mockito.when;
 public class BudgetControllerTest {
 
     @Test
+    public void submit_add_budget_and_throw_database_exception_should_return_error_message() {
+        Budgets mockBudgets = mock(Budgets.class);
+        Model mockModel = mock(Model.class);
+        BudgetController controller = new BudgetController(mockBudgets);
+
+        //mock exception
+
+        Budget budget = new Budget();
+        budget.setMonth("2017-05");
+        budget.setAmount(300);
+        controller.submitAddBudget(budget,mockModel);
+
+    }
+
+    @Test
     public void submit_add_budget_should_call_budgets_add() {
         Budgets mockBudgets = mock(Budgets.class);
         Model mockModel = mock(Model.class);
@@ -25,7 +40,7 @@ public class BudgetControllerTest {
         budget.setAmount(300);
         controller.submitAddBudget(budget,mockModel);
 
-        verify(mockBudgets).add(budget);
+        verify(mockBudgets).add(budget,()->{},()->{});
     }
     
     @Test
