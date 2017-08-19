@@ -1,11 +1,11 @@
 package com.odde.bbuddy.budget.domain;
 
 import com.odde.bbuddy.budget.repo.BudgetRepo;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -88,31 +88,90 @@ public class BudgetsTest {
     }
 
     @Test
-    public void total_months_test() throws ParseException {
+    public void calculate_amount_in_whole_month() throws ParseException {
         BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
         Budgets budgets = new Budgets(mockBudgetRepo);
+        when(mockBudgetRepo.findAll()).thenReturn(getBudgetList());
+        double amount = budgets.calculate("2017-06-05", "2017-06-10");
+        assertThat(amount).isEqualTo(120);
+    }
+
+    @Test
+    public void calculate_amount_between_begin_date_and_end_date() throws ParseException {
+        BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
+        Budgets budgets = new Budgets(mockBudgetRepo);
+        when(mockBudgetRepo.findAll()).thenReturn(getBudgetList());
         double amount = budgets.calculate("2017-06-05", "2017-07-10");
         assertThat(amount).isEqualTo(620);
     }
 
+
     @Test
-    @Ignore
-    public void calculate_amount_between_begin_date_and_end_date() {
-        String beginDate = "2017-06-05";
-        String endDate = "2017-07-10";
+    public void calculate_amount_begin_date_and_end_date() throws ParseException {
         BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
         Budgets budgets = new Budgets(mockBudgetRepo);
+        when(mockBudgetRepo.findAll()).thenReturn(getBudgetList());
+        double amount = budgets.calculate("2017-06-05", "2017-08-10");
+        assertThat(amount).isEqualTo(1030);
+    }
+
+    @Test
+    public void calculate_amount_current_year_begin_date_and_next_year_end_date() throws ParseException {
+        BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
+        Budgets budgets = new Budgets(mockBudgetRepo);
+        when(mockBudgetRepo.findAll()).thenReturn(getBudgetList());
+        double amount = budgets.calculate("2017-11-05", "2018-01-10");
+        assertThat(amount).isEqualTo(670);
+    }
+
+    @Test
+    public void calculate_amount_current_year_begin_date_and_next_year_end_date_test() throws ParseException {
+        BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
+        Budgets budgets = new Budgets(mockBudgetRepo);
+        when(mockBudgetRepo.findAll()).thenReturn(getBudgetList());
+        double amount = budgets.calculate("2017-11-05", "2018-02-10");
+        assertThat(amount).isEqualTo(880);
+    }
+
+    private List<Budget> getBudgetList() {
+        List<Budget> budgetList = new ArrayList<>();
         Budget budget1 = new Budget();
         budget1.setId(2);
         budget1.setAmount(600);
         budget1.setMonth("2017-06");
+        budgetList.add(budget1);
+
         Budget budget2 = new Budget();
         budget2.setId(3);
         budget2.setAmount(310);
         budget2.setMonth("2017-07");
-        List<Budget> allBudgets = Arrays.asList(budget1, budget2);
+        budgetList.add(budget2);
 
-        when(mockBudgetRepo.findAll()).thenReturn(allBudgets);
+        Budget budget3 = new Budget();
+        budget3.setId(4);
+        budget3.setAmount(620);
+        budget3.setMonth("2017-08");
+        budgetList.add(budget3);
+
+        Budget budget4 = new Budget();
+        budget4.setId(5);
+        budget4.setAmount(300);
+        budget4.setMonth("2017-11");
+        budgetList.add(budget4);
+
+        Budget budget5 = new Budget();
+        budget5.setId(6);
+        budget5.setAmount(310);
+        budget5.setMonth("2017-12");
+        budgetList.add(budget5);
+
+        Budget budget6 = new Budget();
+        budget6.setId(7);
+        budget6.setAmount(310);
+        budget6.setMonth("2018-01");
+        budgetList.add(budget6);
+
+        return budgetList;
     }
 
 }

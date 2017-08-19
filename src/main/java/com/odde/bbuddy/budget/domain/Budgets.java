@@ -66,8 +66,13 @@ public class Budgets {
 
         //第一个月的金额
         LocalDate firstDay = LocalDate.parse(beginDate);
-        //LocalDate firstDay = LocalDate.of(begin.getYear(), begin.getMonth(), 1);
+        LocalDate beginLocalDate = LocalDate.parse(endDate);
         LocalDate lastDay = LocalDate.of(firstDay.getYear(), firstDay.getMonth().plus(1), 1).minus(1, DAYS);
+        if(firstDay.getYear() == beginLocalDate.getYear() && firstDay.getMonth() == beginLocalDate.getMonth()) {
+            lastDay = LocalDate.parse(endDate);
+            totalAmount[0] += getAmount(firstDay, lastDay, beginDate, budgets);
+            return totalAmount[0];
+        }
         totalAmount[0] += getAmount(firstDay, lastDay, beginDate, budgets);
 
         //中间月的金额总和
@@ -76,7 +81,9 @@ public class Budgets {
                 .forEach(budget -> {
                     totalAmount[0] += budget.getAmount();
                 });
-        //最后一个月的金
+
+        // 最后一个月的金
+
         LocalDate endLastDay = LocalDate.parse(endDate);
         LocalDate endFirstDay = LocalDate.of(endLastDay.getYear(), endLastDay.getMonth(), 1);
         totalAmount[0] += getAmount(endFirstDay, endLastDay, endDate, budgets);
@@ -101,7 +108,7 @@ public class Budgets {
         Period period = Period.between(begin, end);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 
-        for (int i = 1; i < period.getMonths(); i++) {
+        for (int i = 1; i < (period.getYears() * 12 + period.getMonths()); i++) {
             Date curDate = Date.from(begin.plus(i, MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant());
             months.add(sdf.format(curDate));
         }
