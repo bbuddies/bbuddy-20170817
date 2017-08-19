@@ -22,15 +22,23 @@ public class Budget {
     private String month;
     private int amount;
 
-    public LocalDate firstDayOfBudgetMonth() {
+    private LocalDate firstDayOfBudgetMonth() {
         return LocalDate.parse(month + "-01");
     }
 
-    public double dailyAmount() {
+    private double dailyAmount() {
         return 1.0d * amount / firstDayOfBudgetMonth().lengthOfMonth();
     }
 
-    public boolean containsDate(LocalDate date) {
-        return date.withDayOfMonth(1).equals(firstDayOfBudgetMonth());
+    private LocalDate lastDayOfMonth() {
+        return firstDayOfBudgetMonth().withDayOfMonth(firstDayOfBudgetMonth().lengthOfMonth());
+    }
+
+    public double getOverlappingAmount(QueryPeriod queryPeriod) {
+        LocalDate endOfOverlapping = queryPeriod.getEndDate().isBefore(lastDayOfMonth())? queryPeriod.getEndDate() : lastDayOfMonth();
+        LocalDate beginOfOverlapping = queryPeriod.getBeginDate().isAfter(firstDayOfBudgetMonth()) ? queryPeriod.getBeginDate() : firstDayOfBudgetMonth();
+        QueryPeriod overlappingPeriod = new QueryPeriod(beginOfOverlapping, endOfOverlapping);
+
+        return overlappingPeriod.dayCount() * dailyAmount();
     }
 }
