@@ -134,7 +134,7 @@ public class BudgetsTest {
     }
 
     @Test
-    public void calculate_amount_current_year_begin_date_and_next_year_end_date_2017_2018() throws ParseException {
+    public void calculate_amount_2016_year_begin_date_and_2017_year_end_date() throws ParseException {
         BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
         Budgets budgets = new Budgets(mockBudgetRepo);
         List<Budget> budgetList = new ArrayList<>();
