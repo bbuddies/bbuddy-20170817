@@ -14,7 +14,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MONTHS;
 
 @Component
@@ -67,7 +66,8 @@ public class Budgets {
         //第一个月的金额
         LocalDate firstDay = LocalDate.parse(beginDate);
         LocalDate beginLocalDate = LocalDate.parse(endDate);
-        LocalDate lastDay = LocalDate.of(firstDay.getYear(), firstDay.getMonth().plus(1), 1).minus(1, DAYS);
+        LocalDate lastDay = firstDay.withDayOfMonth(firstDay.lengthOfMonth());
+
         if(firstDay.getYear() == beginLocalDate.getYear() && firstDay.getMonth() == beginLocalDate.getMonth()) {
             lastDay = LocalDate.parse(endDate);
             totalAmount[0] += getAmount(firstDay, lastDay, beginDate, budgets);
@@ -83,7 +83,6 @@ public class Budgets {
                 });
 
         // 最后一个月的金
-
         LocalDate endLastDay = LocalDate.parse(endDate);
         LocalDate endFirstDay = LocalDate.of(endLastDay.getYear(), endLastDay.getMonth(), 1);
         totalAmount[0] += getAmount(endFirstDay, endLastDay, endDate, budgets);
