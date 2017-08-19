@@ -153,8 +153,41 @@ public class BudgetsTest {
         assertThat(amount).isEqualTo(150);
     }
 
+    @Test
+    public void some_month_have_no_budget() throws ParseException {
+
+        BudgetRepo mockBudgetRepo = mock(BudgetRepo.class);
+        Budgets budgets = new Budgets(mockBudgetRepo);
+        List<Budget> budgetList = new ArrayList<>();
+        Budget budget1 = new Budget();
+        budget1.setAmount(310);
+        budget1.setMonth("2016-10");
+        budgetList.add(budget1);
+
+               Budget budget2 = new Budget();
+        budget2.setAmount(310);
+        budget2.setMonth("2016-12");
+        budgetList.add(budget2);
+
+        Budget budget3 = new Budget();
+        budget3.setAmount(310);
+        budget3.setMonth("2017-01");
+        budgetList.add(budget3);
+
+
+        when(mockBudgetRepo.findAll()).thenReturn(budgetList);
+        double amount = budgets.calculate("2016-09-15", "2017-01-10");
+        assertThat(amount).isEqualTo(720);
+
+//        givenExistingBudgets(
+//                budget("2016-10", 310),
+//                budget("2016-12", 310),
+//                budget("2017-01", 310));
+//
+//        assertThat(budgets.calculate("2016-09-15", "2017-01-10")).isEqualTo(720);
+    }
+
     private List<Budget> getBudgetList() {
-        // 2017-07-05", "2018-03-10")
         List<Budget> budgetList = new ArrayList<>();
         Budget budget1 = new Budget();
         budget1.setId(2);

@@ -104,10 +104,11 @@ public class Budgets {
         List<String> months = new ArrayList<>();
         LocalDate begin = LocalDate.parse(beginDate);
         LocalDate end = LocalDate.parse(endDate);
-        Period period = Period.between(begin, end);
+        Period period = Period.between(LocalDate.of(begin.getYear(),begin.getMonth(),01),
+                LocalDate.of(end.getYear(),end.getMonth(),01));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 
-        for (int i = 1; i < (period.getYears() * 12 + period.getMonths()); i++) {
+        for (int i = 1; i < period.getMonths(); i++) {
             Date curDate = Date.from(begin.plus(i, MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant());
             months.add(sdf.format(curDate));
         }
